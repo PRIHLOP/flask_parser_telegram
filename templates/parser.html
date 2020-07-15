@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Парсер чатов</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+{% include 'header.html' %}
+<div class="container">
+
+<center><h1 class="font-weight-bold" style="height: 100px;margin-bottom: 0px;margin-top: 40px;">Парсер пользователей чата</h1></center>
+    <div class=”row align-items-center”>
+  <div style="height: 350px;width: 100%;margin-top: -20px;margin-top: 20px; background-color: rgb(192,192,192);">
+<form method="post" action="parser">
+  <div class="form-group" style="width: 50%;margin-left: 20%;">
+    <center><label for="formGroupExampleInput">Ссылка на чат</label></center>
+    <input type="text" class="form-control" id="formGroupExampleInput"  name="link" placeholder="https://t.me/promfree">
+ <div style="float:right; margin-top: 20px;"class="col-left">
+      <button type="submit" class="btn btn-primary mb-2">Получить список</button>
+    </div>
+
+  </div>
+</form>
+</div>
+  </div>
+</div>
+
+
+</body>
+</html>
