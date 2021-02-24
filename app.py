@@ -1,49 +1,50 @@
-import flask
-from flask import Flask, send_from_directory, render_template, request, redirect, url_for, send_file
-import telethon
-from telethon.sync import TelegramClient, events
+# import flask
+# import sys
+# from flask
+from flask import Flask, send_from_directory, render_template, request
+from telethon.sync import TelegramClient
 import asyncio
+# from contextlib import redirect_stdout
 
 loop = asyncio.get_event_loop()
 app = Flask(__name__)
-import asyncio
 
-
-
-user = TelegramClient("m4", 949749, "b67eba7db41cbe3799d551f451f54acb", device_model="Xiaomi Redmi Note 4",
+user = TelegramClient("user", "1989568", "747f20657437007b833f335f7422a156",
+                      device_model="Xiaomi Redmi Note 4",
                       system_version="5.10.0", app_version="10 P (27)")
 user.start()
 
 
 async def send_users(link):
-    users=await user.get_participants(link)
-    list_data=[]
-    for i in users:
-            if i.username!=None:
-             list_data.append(i.username)
-    print(len(users))
-    f=open("static\\file.txt",mode="w")
-    for i in list_data:
-        f.write(str(i)+"\n")
+    filename = link.split("/")[-1]
+    f = open('static//{}.csv'.format(filename), mode="w")
+    f.write("User ID;First Name;Last Name;Username;Phone"+"\n")
+    count = 0
+    async for u in user.iter_participants(link, aggressive=False):
+        string = f"{u.id};{u.first_name};{u.last_name};@{u.username};{u.phone}"
+#        print(string)
+        f.write("%s\n" % string)
+        count += 1
     f.close()
 
-@app.route('/parser',methods=['GET',"POST"])
-def hello_world():
-    list=[]
 
+@app.route('/parser', methods=['GET', "POST"])
+def hello_world():
     if request.method == 'POST':
         link = request.form['link']
         loop.run_until_complete(send_users(link))
-        return app.send_static_file('file.txt')
-
+        filename = link.split("/")[-1]
+        return send_from_directory(directory='static',
+                                   filename='{}.csv'.format(filename),
+                                   as_attachment=True)
     else:
-     return render_template("parser.html")
+        return render_template("parser.html")
+
 
 @app.route("/")
 def main():
     return render_template("index.html")
 
 
-
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=80)

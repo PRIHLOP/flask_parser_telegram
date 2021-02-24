@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  bot:
+    image: telegram-parser-bot:latest
+    build:
+      context: .
+    container_name: tg-parser
+    hostname: tg-parser
+#    ports:
+#      - 49.12.119.246:8088:80
+    environment:
+#      - APP_ID=$APP_ID
+#      - API_HASH=$API_HASH
+#      - TG_BOT_TOKEN=$BOT_TOKEN
+#      - AUTH_USERS=$AUTH_USERS
+      - TZ=Europe/Minsk
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./app.py:/app/app.py
+      - ./user.session:/app/user.session
+      - ./static:/app/static
+    restart: always
+    networks:
+      - synapse
+
+networks:
+  synapse:
+    external: true
